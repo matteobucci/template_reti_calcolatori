@@ -98,11 +98,11 @@ int main(int argc, char **argv){
     fd_max = datagram_sd + 1;
     
     signal(SIGCHLD, gestore); //Aggancio il gestore
-    len = sizeof(struct sockaddr_in); //Lunghezza indirizzo del client. Mi servirà per effettuare l'accept.
+    
     
     /*Ciclo ricezioni eventi select*/
     for (;;){
-       //ok
+        len = sizeof(struct sockaddr_in);
         
         /*Esecuzione select*/
         if ((num=select(fd_max, &temp_fds, NULL, NULL, NULL)) < 0){ 
@@ -117,19 +117,27 @@ int main(int argc, char **argv){
         
         /*Datagram in arrivo*/
         if (FD_ISSET(datagram_sd, &temp_fds)){
-            if (recvfrom(datagram_sd, &buffer, sizeof(buffer), 0, (struct sockaddr *)&client, &len)<0){
+            
+            if (recvfrom(datagram_sd, buffer, sizeof(buffer), 0, (struct sockaddr *)&client_addr, &len)<0){
                 perror("SERVER_DATAGRAM: Errore nella ricezione del datagram:"); 
                 continue;
-            }	
+            }
+            client = gethostbyaddr((char *) &client_addr.sin_addr,sizeof(client_addr.sin_addr), AF_INET);
             if (client == NULL){
                 perror("SERVER_DATAGRAM: Impossibile recuperare le informazioni del cliente:\n");
                 close(client_sd);
-                exit(3);
+                continue;
             }else{
                 printf("SERVER_DATAGRAM: L'host client che sto servendo è %s\n", client->h_name);
             }
             
-            //TODO:SVILUPPARE LA LOGICA APPLICATIVA DEL SERVER DATAGRAM
+            //Server di echo di prova
+            if (sendto(datagram_sd, buffer, sizeof(buffer), 0, (struct sockaddr *)&client_addr, len)<0){
+                perror("SERVER_DATAGRAM: Errore nell'invio del datagram:"); 
+                continue;
+            }	
+            
+            printf("SERVER_DATAGRAM: Cliente servito con successo\n");
             
         }
 
