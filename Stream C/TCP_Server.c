@@ -16,6 +16,7 @@
 #include <unistd.h>
 
 #define DEFAULT_PORT 10123
+#define MAX_STR_LEN 128
 
 void gestore(int signo);
 
@@ -103,6 +104,12 @@ int main(int argc, char* argv[]){
                     printf("FIGLIO: L'host client che sto servendo è %s\n", client->h_name);
                 }
                 
+		char input[MAX_STR_LEN];
+		while((read(client_sd, input, MAX_STR_LEN)) > 0){
+			printf("Ricevuto %s\n", input);
+			write(client_sd, input, MAX_STR_LEN);
+		}
+			
                 
                 close(client_sd);
                 exit(0);

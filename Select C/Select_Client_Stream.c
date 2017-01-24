@@ -1,5 +1,5 @@
 /*
- * Template di soluzione TCP_Client
+ * Template di soluzione Select Client Stream
  * Matteo Bucci
  * 0000722984
  */
@@ -11,6 +11,7 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <string.h>
+#include <unistd.h>
 
 #define MAX_STR_LEN 128
 
@@ -70,11 +71,15 @@ int main(int argc, char* argv[]){
     /*Corpo del client*/
     printf("%s\n", input_request);
     while (gets(input)){
-        
-        printf("%s\n", input_request);
+	//TODO:SVILUPPARE LA LOGICA PERSONALIZZATA
+        write(sock_fd, input, MAX_STR_LEN);
+	read(sock_fd, input, MAX_STR_LEN);
+	printf("Ricevuto : %s\n", input);
+	printf("%s\n", input_request);
     }
     
     /*Operazioni di chiusura*/
     printf("Chiusura client.\n");
+    close(sock_fd);
     exit(0);
 }

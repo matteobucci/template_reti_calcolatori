@@ -19,6 +19,7 @@
 
 #define DEFAULT_PORT 10123
 #define BUFFER_SIZE 256
+#define MAX_STR_LEN 128
 
 void gestore(int signo);
 
@@ -168,6 +169,11 @@ int main(int argc, char **argv){
                     }
                     
                     //TODO:SVILUPPARE LA LOGICA APPLICATIVA DEL SERVER TCP
+		    char input[MAX_STR_LEN];
+		    while((read(client_sd, input, MAX_STR_LEN)) > 0){
+			printf("Ricevuto %s\n", input);
+		 	write(client_sd, input, MAX_STR_LEN);
+		    }
                     
                     close(client_sd);
                     exit(0);

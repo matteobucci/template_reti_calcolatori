@@ -1,5 +1,5 @@
 /*
- * Template di soluzione UDP_Client
+ * Template di soluzione Select Client Datagram
  * Matteo Bucci
  * 0000722984
  */
@@ -63,8 +63,9 @@ int main(int argc, char* argv[]){
     /*Corpo del client*/
     printf("%s\n", input_request);
     while (gets(input)){
+	len = sizeof(serv_addr);
         printf("%s\n", input_request);
-	if((num = sendto(sock_fd, input, sizeof(input), 0, (struct sockaddr *)&serv_addr, sizeof(serv_addr))) <= 0){
+	if((num = sendto(sock_fd, input, sizeof(input), 0, (struct sockaddr *)&serv_addr, len)) <= 0){
             perror("Errore nell'invio del datagram:");
         }else{
             printf("Datagram inviato con successo. (%d byte)\n", num);
