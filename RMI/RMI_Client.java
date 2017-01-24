@@ -65,13 +65,13 @@ public class RMI_Client {
 			while((risposta = stdIn.readLine()) != null){
 				switch(risposta){
 				case "a": //Metodo senza argomenti
-					serverRMI.getInfo();
+					System.out.println(serverRMI.getInfo());
 					break;
 				case "b": //Metodo con argomento stringa
 					System.out.println("Inserisci una stringa");
 					risposta = stdIn.readLine();
 					if(risposta != null){
-						serverRMI.getEcho(risposta);
+						System.out.println(serverRMI.getEcho(risposta));
 					}				
 					break;
 				default:
